@@ -1,0 +1,19 @@
+@mixin tablet {
+    @media (min-width: 768px) {
+      @content; /* Content within the mixin will be inserted here */
+    }
+  }
+
+  @mixin desktop {
+    @media (min-width: 1280px)  {
+      @content; /* Content within the mixin will be inserted here */
+    }
+  }
+
+
+  @font-face {
+
+    font-family: 'Avenir-Next';
+    src: url("./fonts/avenir-next-regular.woff") format("woff");
+    font-weight: 700;
+}

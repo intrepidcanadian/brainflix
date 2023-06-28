@@ -1,23 +1,22 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Header from './components/Header/Header';
+import VideoPlayer from './components/Main/main.js';
 import './App.css';
+import './styles.css';
+
+import videoDataList from '../src/data/video-details.json'
 
 function App() {
+  const [selected, setSelected] = useState(null);
+
+  const handleVideoSelection = (videoId) => {
+    setSelected(videoId);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <VideoPlayer selected={selected} setSelected={handleVideoSelection} videoDataList={videoDataList} />
     </div>
   );
 }
