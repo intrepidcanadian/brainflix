@@ -6,7 +6,7 @@ import avatar from "../assets/images/Mohan-muruge.jpg";
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 
-const Home = ({ apiKey }) => {
+const Home = ({videos}) => {
 
 
     // i am destructuring here from /video/:id <Route path="/video/:id" from the App.js page
@@ -38,16 +38,18 @@ const Home = ({ apiKey }) => {
     useEffect(() => {
         const fetchVideoData = async () => {
             try {
-                const response = await axios.get(`https://project-2-api.herokuapp.com/videos?api_key=${apiKey}`);
-                const data = await response.data;
+                const response = await axios.get(`http://localhost:8000/videos/`);
+                let data = await response.data;
+                let defaultVideoId = id ? id : data[0].id;
+
                 setVideoDataList(data);
-
-                const defaultVideoId = id ? id : data[0].id;
-
-                const response2 = await axios.get(`https://project-2-api.herokuapp.com/videos/${defaultVideoId}?api_key=${apiKey}`);
-                const data2 = await response2.data
-                setSelectedVideo(data2);
+                setSelectedVideo(data.find(video => video.id === defaultVideoId));
                 fetchComments(defaultVideoId);
+
+                // const response2 = await axios.get(`http://localhost:8000/videos/${id}`);
+                // const data2 = await response2.data
+                // setSelectedVideo(data2);
+                // fetchComments(defaultVideoId);
     
             } catch (error) {
                 console.error('Error fetching video data:', error);
@@ -58,16 +60,16 @@ const Home = ({ apiKey }) => {
     }, [id]);
 
 
-    const fetchComments = async (videoId) => {
+    const fetchComments = async () => {
         try {
-            const response = await axios.get(`https://project-2-api.herokuapp.com/videos/${videoId}?api_key=${apiKey}`);
-            const data = response.data;
-            setComments(data.comments);
+          const response = await axios.get(`http://localhost:8000/videos/${selectedVideo.id}`);
+          const data = response.data;
+          setComments(data.comments);
         } catch (error) {
-            console.error('Error fetching comments:', error);
+          console.error('Error fetching comments:', error);
         }
-    };
-
+      };
+      
     const handleCommentSubmit = () => {
         if (newComment) {
             const comment = {
@@ -82,9 +84,9 @@ const Home = ({ apiKey }) => {
         }
     };
 
-    if (videoDataList.length === 0 || !selectedVideo) {
+    if (!videoDataList || videoDataList.length === 0 || !selectedVideo) {
         return <div>Loading...</div>;
-    }
+      }
 
     const { title, channel, image, description, likes, views, video } = selectedVideo
 

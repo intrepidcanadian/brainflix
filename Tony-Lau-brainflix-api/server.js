@@ -25,7 +25,7 @@ function generateUniqueId() {
   return Math.random().toString(36).substr(2, 9);
 }
 
-// Start the server
+
 app.listen(8000, () => {
   console.log('Server is running on http://localhost:8000');
 });
